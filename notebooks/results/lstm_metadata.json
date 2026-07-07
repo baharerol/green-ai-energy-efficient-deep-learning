@@ -1,0 +1,29 @@
+{
+  "lstm_experiments": {
+    "dataset": "NASA Sunspot Time Series",
+    "total_data_points": 309,
+    "train_size": 247,
+    "test_size": 62,
+    "sequence_length": 24,
+    "baseline_hidden_size": 256,
+    "small_hidden_size": 128,
+    "num_layers": 2,
+    "dropout": 0.2,
+    "learning_rate": 0.001,
+    "optimizer": "Adam",
+    "loss_function": "MSELoss",
+    "quantization": "Dynamic INT8 (nn.LSTM + nn.Linear)",
+    "early_stopping": {
+      "max_epochs": 100,
+      "patience": 10,
+      "monitor": "val_loss"
+    },
+    "device": "CPU",
+    "pytorch_version": "2.12.1+cpu",
+    "codecarbon": {
+      "mode": "offline",
+      "country": "TUR",
+      "gpu_tracking": false
+    }
+  }
+}

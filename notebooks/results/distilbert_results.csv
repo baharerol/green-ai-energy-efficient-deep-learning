@@ -1,0 +1,5 @@
+model,experiment,accuracy,f1_score,model_size_mb,parameters,inference_time_s,energy_kwh,epochs_trained
+DistilBERT,Baseline (3 epoch),0.8589,0.8588,255.42,66955010,2.0713,0.009938628728455107,3
+DistilBERT,Dynamic Quantization INT8,0.8406,0.8404,132.29,66955010,2.8975,1.94737398704569e-05,0
+DistilBERT,Structured Pruning 33% + 1ep recovery,0.8624,0.8621,237.4,62231810,1.8575,0.004980475929495946,1
+DistilBERT,Early Stopping (stopped ep 2),0.8704,0.8704,255.42,66955010,2.1066,0.014899203119138489,2

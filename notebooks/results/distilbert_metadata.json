@@ -1,0 +1,62 @@
+{
+  "distilbert_experiments": {
+    "dataset": "SST-2 (GLUE)",
+    "train_subset": 5000,
+    "val_size": 872,
+    "max_len": 128,
+    "batch_size": 32,
+    "learning_rate": 2e-05,
+    "device": "cpu",
+    "pytorch_version": "2.12.1+cpu",
+    "pruning_strategy": "Structured \u2014 attention head pruning, 4/12 heads per layer (33%)",
+    "pruning_heads": {
+      "0": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "1": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "2": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "3": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "4": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "5": [
+        0,
+        2,
+        4,
+        6
+      ]
+    },
+    "quantization": "Dynamic INT8 (torch.nn.Linear layers)",
+    "early_stopping": {
+      "max_epochs": 8,
+      "patience": 2,
+      "monitor": "val_loss"
+    },
+    "codecarbon": {
+      "mode": "offline",
+      "country": "TUR",
+      "gpu_tracking": false
+    }
+  }
+}

@@ -1,0 +1,5 @@
+model,experiment,mae,rmse,model_size_mb,parameters,inference_time_s,energy_kwh,epochs_trained
+LSTM,"Baseline (hidden=256, 50ep)",38.681,49.7628,3.0205,791809,0.009664,3.555963505572057e-05,50
+LSTM,Dynamic Quantization INT8,38.6879,49.7719,0.7722,791809,0.025149,3.0466870317951137e-06,0
+LSTM,Early Stopping (best ep 5),42.4005,48.9178,3.0205,791809,0.009856,1.0821187893237244e-05,5
+LSTM,"Küçük Model (hidden=128, 50ep)",41.3041,51.4007,0.7603,199297,0.003798,1.5229971063958071e-05,50

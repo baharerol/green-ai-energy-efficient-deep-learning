@@ -1,0 +1,6 @@
+Model,Teknik,F1,Precision,Recall,Accuracy,Eğitim Süresi (sn),Enerji (kWh),CO2 (kg),Model Boyutu (MB)
+MobileNetV2,Baseline (Early Stopping),0.6522,0.655,0.6547,0.6547,1038.72,0.008409,0.003907,9.27
+MobileNetV2,Quantization (INT8),0.6253,0.6336,0.6286,0.6286,19.93,0.00012,5.6e-05,2.6
+MobileNetV2,Pruning (%50 Sparsity),0.642,0.6434,0.6441,0.6441,377.24,0.002912,0.001353,9.16
+MobileNetV2,Pruning v2 (%50 Sparsity - Full Model),0.8405,0.8442,0.8406,0.8406,1584.48,0.016224,0.007538,9.16
+MobileNetV2,Baseline (Unfreezed),0.864,0.8664,0.8638,0.8638,2398.31,0.021275,0.009884,26.34

@@ -1,0 +1,14 @@
+model,experiment,accuracy,f1_score,model_size_mb,energy_kwh,training_time_s,co2_kg,parameters,inference_time_s,mae,rmse
+MobileNetV2,Baseline (Early Stopping),0.6547,0.6522,9.27,0.008409,1038.72,0.003907,,,,
+MobileNetV2,Quantization (INT8),0.6286,0.6253,2.6,0.00012,19.93,5.6e-05,,,,
+MobileNetV2,Pruning (%50 Sparsity),0.6441,0.642,9.16,0.002912,377.24,0.001353,,,,
+MobileNetV2,Pruning v2 (%50 Sparsity - Full Model),0.8406,0.8405,9.16,0.016224,1584.48,0.007538,,,,
+MobileNetV2,Baseline (Unfreezed),0.8638,0.864,26.34,0.021275,2398.31,0.009884,,,,
+DistilBERT,Baseline (3 epoch),0.8589,0.8588,255.42,0.0099386287284551,,,66955010,2.0713,,
+DistilBERT,Dynamic Quantization INT8,0.8406,0.8404,132.29,1.94737398704569e-05,,,66955010,2.8975,,
+DistilBERT,Structured Pruning 33% + 1ep recovery,0.8624,0.8621,237.4,0.0049804759294959,,,62231810,1.8575,,
+DistilBERT,Early Stopping (stopped ep 2),0.8704,0.8704,255.42,0.0148992031191384,,,66955010,2.1066,,
+LSTM,"Baseline (hidden=256, 50ep)",,,3.0205,3.555963505572057e-05,,,791809,0.009664,38.681,49.7628
+LSTM,Dynamic Quantization INT8,,,0.7722,3.0466870317951137e-06,,,791809,0.025149,38.6879,49.7719
+LSTM,Early Stopping (best ep 5),,,3.0205,1.0821187893237244e-05,,,791809,0.009856,42.4005,48.9178
+LSTM,"Küçük Model (hidden=128, 50ep)",,,0.7603,1.5229971063958071e-05,,,199297,0.003798,41.3041,51.4007
