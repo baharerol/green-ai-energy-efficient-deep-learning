@@ -1,0 +1,1 @@
+# green-ai-enerji-verimli-derin-ogrenme
