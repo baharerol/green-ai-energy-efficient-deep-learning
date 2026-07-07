@@ -6,33 +6,21 @@ Derin öğrenme modellerinde enerji tüketimini azaltmaya yönelik optimizasyon 
 
 - **Görüntü sınıflandırma** — MobileNetV2 + CIFAR-10
 - **Metin sınıflandırma** — DistilBERT + SST-2
-- **Zaman serisi tahmini** — LSTM + NASA Güneş Lekesi Zaman Serisi
+- **Zaman serisi tahmini** — LSTM + NASA Sunspot Zaman Serisi
 
 Her model için baseline, quantization (INT8), yapısal küçültme (pruning / hidden-size reduction) ve early stopping deneyleri ayrı ayrı yürütülmüş; toplam 13 deneyin sonuçları tek bir veri setinde birleştirilip etkileşimli bir dashboard üzerinden karşılaştırılabilir hâle getirilmiştir.
 
-## İçindekiler
-├── README.md
-├── notebooks/
-│   ├── 01_mobilenet_cifar10.ipynb
-│   ├── 02_distilbert_sst2.ipynb
-│   ├── 03_lstm_sunspot.ipynb
-│   └── 04_visualization.ipynb
-├── dashboard/
-│   └── app.py
-├── results/
-│   └── all_results.csv
-└── requirements.txt
 
 ## Notebook'lar
 
 | Notebook | Açıklama |
 |---|---|
-| `01_mobilenet_cifar10.ipynb` | MobileNetV2 + CIFAR-10 üzerinde baseline, quantization, pruning (Dense-only ve full-model) deneyleri |
-| `02_distilbert_sst2.ipynb` | DistilBERT + SST-2 üzerinde baseline, dynamic quantization, structured attention-head pruning, early stopping deneyleri |
-| `03_lstm_sunspot.ipynb` | LSTM + NASA Güneş Lekesi Zaman Serisi üzerinde baseline, dynamic quantization, early stopping, hidden-size reduction deneyleri |
-| `04_visualization.ipynb` | Birleştirilmiş sonuç verisi (`all_results.csv`) üzerinden karşılaştırma grafiklerinin üretimi (doğruluk, model boyutu, enerji, çıkarım süresi, cross-model quantization etkisi) |
+| `01_mobilenetv2_cifar10_optimization.ipynb` | MobileNetV2 + CIFAR-10 üzerinde baseline, quantization, pruning (Dense-only ve full-model) deneyleri |
+| `02_distilbert_sst2_optimization.ipynb` | DistilBERT + SST-2 üzerinde baseline, dynamic quantization, structured attention-head pruning, early stopping deneyleri |
+| `03_LSTM_optimization.ipynb` | LSTM + NASA Güneş Lekesi Zaman Serisi üzerinde baseline, dynamic quantization, early stopping, hidden-size reduction deneyleri |
+| `visualization.ipynb` | Birleştirilmiş sonuç verisi (`all_results.csv`) üzerinden karşılaştırma grafiklerinin üretimi (doğruluk, model boyutu, enerji, çıkarım süresi, cross-model quantization etkisi) |
 
-Notebook'lar yukarıdaki sırayla çalıştırılmalıdır; `04_gorsellestirme.ipynb`, önceki üç notebook'un ürettiği sonuç dosyalarına bağımlıdır.
+Notebook'lar yukarıdaki sırayla çalıştırılmalıdır; `visualization.ipynb`, önceki üç notebook'un ürettiği sonuç dosyalarına bağımlıdır.
 
 ## Sonuç Verisi
 
