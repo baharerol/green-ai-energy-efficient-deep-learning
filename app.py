@@ -1,4 +1,3 @@
-# app_dashboard.py
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -6,13 +5,13 @@ from plotly.subplots import make_subplots
 import streamlit.components.v1 as components
 import numpy as np
 
-# --- Sayfa Ayarları ---
+#Sayfa Ayarları
 st.set_page_config(
     page_title="Green AI Dashboard",
     layout="wide"
 )
 
-# --- Custom CSS (Dark Theme) ---
+#Custom CSS (Dark Theme)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -134,7 +133,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# --- Veri ---
+#Veri
 df = pd.read_csv("notebooks/results/all_results.csv")
 df_mob = df[df['model'] == 'MobileNetV2'].copy()
 df_dis = df[df['model'] == 'DistilBERT'].copy()
@@ -158,7 +157,7 @@ DARK_LAYOUT = dict(
     height=400,
 )
 
-# --- Header ---
+#Header
 st.markdown("""
 <div class="main-header">
     <h1>Green AI: Enerji Verimli Derin Öğrenme</h1>
@@ -166,7 +165,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# --- Özet Metrikler ---
+#Özet Metrikler
 best_acc_row = df.loc[df['accuracy'].idxmax()]
 smallest_row = df.loc[df['model_size_mb'].idxmin()]
 df_energy_valid = df[df['energy_kwh'] > 0.001]
@@ -198,12 +197,12 @@ with col3:
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-# --- Tabs ---
+#Tabs
 tab1, tab2, tab3, tab4, tab_lstm, tab5, tab6 = st.tabs([
     "Doğruluk", "Model Boyutu", "Enerji", "Çıkarım Hızı", "LSTM", "Deney Karşılaştırıcı", "Veri Tablosu"
 ])
 
-# --- TAB 1: Doğruluk ---
+#TAB 1: Doğruluk 
 with tab1:
     st.markdown('<div class="section-header">Doğruluk Karşılaştırması</div>', unsafe_allow_html=True)
     
@@ -253,7 +252,7 @@ with tab1:
     </div>
     """, unsafe_allow_html=True)
 
-# --- TAB 2: Model Boyutu ---
+# TAB 2: Model Boyutu
 
 with tab2:
     st.markdown('<div class="section-header">Model Boyutu Karşılaştırması</div>', unsafe_allow_html=True)
@@ -311,7 +310,7 @@ with tab2:
     """, unsafe_allow_html=True)
     
 
-# --- TAB 3: Enerji ---
+#TAB 3: Enerji
 with tab3:
     st.markdown('<div class="section-header">Eğitim Enerji Tüketimi</div>', unsafe_allow_html=True)
     
@@ -369,7 +368,7 @@ with tab3:
     </div>
     """, unsafe_allow_html=True)
 
-# --- TAB 4: Çıkarım Hızı ---
+#TAB 4: Çıkarım Hızı
 
 
 with tab4:
@@ -463,7 +462,7 @@ with tab4:
     """, unsafe_allow_html=True)
     
     
-# --- TAB LSTM ---
+#TAB LSTM 
 with tab_lstm:
     st.markdown('<div class="section-header">LSTM + Güneş Lekesi Zaman Serisi</div>', unsafe_allow_html=True)
     
@@ -559,7 +558,7 @@ with tab_lstm:
     </div>
     """, unsafe_allow_html=True)
 
-# --- TAB 5: Deney Karşılaştırıcı ---
+#TAB 5: Deney Karşılaştırıcı
 with tab5:
     st.markdown('<div class="section-header">Deney Karşılaştırıcı</div>', unsafe_allow_html=True)
     
@@ -700,7 +699,7 @@ with tab5:
     )
     st.plotly_chart(fig_radar, use_container_width=True)
 
-# --- TAB 6: Veri Tablosu ---
+#TAB 6: Veri Tablosu
 with tab6:
     st.markdown('<div class="section-header">Tüm Deney Sonuçları</div>', unsafe_allow_html=True)
     
@@ -727,7 +726,7 @@ with tab6:
         }
     )
 
-# --- Footer ---
+# Footer
 st.markdown("""
 <div class="footer">
     TÜBİTAK 2209-A | Green AI — Enerji Verimli Derin Öğrenme Optimizasyonları<br>
