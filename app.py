@@ -4,6 +4,7 @@ import plotly.graph_objects as go
 from plotly.subplots import make_subplots
 import streamlit.components.v1 as components
 import numpy as np
+from pathlib import Path
 
 #Sayfa Ayarları
 st.set_page_config(
@@ -134,7 +135,8 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 #Veri
-df = pd.read_csv("notebooks/results/all_results.csv")
+CSV_PATH = Path(__file__).resolve().parent.parent / "notebooks" / "results" / "all_results.csv"
+df = pd.read_csv(CSV_PATH)
 df_mob = df[df['model'] == 'MobileNetV2'].copy()
 df_dis = df[df['model'] == 'DistilBERT'].copy()
 df_lstm = df[df['model'] == 'LSTM'].copy()
