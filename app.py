@@ -135,7 +135,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 #Veri
-CSV_PATH = Path(__file__).resolve().parent.parent / "notebooks" / "results" / "all_results.csv"
+CSV_PATH = Path(__file__).resolve().parent / "notebooks" / "results" / "all_results.csv"
 df = pd.read_csv(CSV_PATH)
 df_mob = df[df['model'] == 'MobileNetV2'].copy()
 df_dis = df[df['model'] == 'DistilBERT'].copy()
