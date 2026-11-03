@@ -6,13 +6,13 @@ import streamlit.components.v1 as components
 import numpy as np
 from pathlib import Path
 
-#Sayfa Ayarları
+# Page config
 st.set_page_config(
     page_title="Green AI Dashboard",
     layout="wide"
 )
 
-#Custom CSS (Dark Theme)
+# Custom CSS (Dark Theme)
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -134,7 +134,7 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-#Veri
+# Data
 CSV_PATH = Path(__file__).resolve().parent / "notebooks" / "results" / "all_results.csv"
 df = pd.read_csv(CSV_PATH)
 df_mob = df[df['model'] == 'MobileNetV2'].copy()
@@ -142,7 +142,7 @@ df_dis = df[df['model'] == 'DistilBERT'].copy()
 df_lstm = df[df['model'] == 'LSTM'].copy()
 LSTM_COLOR = '#10B981'
 
-# Plotly dark tema renkleri
+# Plotly dark theme colors
 MOB_COLOR = '#60A5FA'
 DIS_COLOR = '#FB923C'
 GREEN = '#4ADE80'
@@ -159,15 +159,15 @@ DARK_LAYOUT = dict(
     height=400,
 )
 
-#Header
+# Header
 st.markdown("""
 <div class="main-header">
-    <h1>Green AI: Enerji Verimli Derin Öğrenme</h1>
-    <p>MobileNetV2 + CIFAR-10 | DistilBERT + SST-2 | LSTM + NASA's Sunspot Time Series | Optimizasyon Tekniklerinin Karşılaştırmalı Analizi</p>
+    <h1>Green AI: Energy-Efficient Deep Learning</h1>
+    <p>MobileNetV2 + CIFAR-10 | DistilBERT + SST-2 | LSTM + NASA's Sunspot Time Series | Comparative Analysis of Optimization Techniques</p>
 </div>
 """, unsafe_allow_html=True)
 
-#Özet Metrikler
+# Summary metrics
 best_acc_row = df.loc[df['accuracy'].idxmax()]
 smallest_row = df.loc[df['model_size_mb'].idxmin()]
 df_energy_valid = df[df['energy_kwh'] > 0.001]
@@ -177,14 +177,14 @@ col1, col2, col3 = st.columns(3)
 with col1:
     st.markdown(f"""
     <div class="metric-card green">
-        <div class="label">En Yüksek Doğruluk</div>
+        <div class="label">Highest Accuracy</div>
         <div class="value">{best_acc_row['accuracy']:.2%}</div>
         <div class="detail">{best_acc_row['experiment']}</div>
     </div>""", unsafe_allow_html=True)
 with col2:
     st.markdown(f"""
     <div class="metric-card blue">
-        <div class="label">En Küçük Model</div>
+        <div class="label">Smallest Model</div>
         <div class="value">{smallest_row['model_size_mb']:.2f} MB</div>
         <div class="detail">{smallest_row['experiment']}</div>
     </div>""", unsafe_allow_html=True)
@@ -192,21 +192,21 @@ with col3:
     if lowest_energy_row is not None:
         st.markdown(f"""
         <div class="metric-card orange">
-            <div class="label">En Az Enerji</div>
+            <div class="label">Lowest Energy</div>
             <div class="value">{lowest_energy_row['energy_kwh']*1000:.2f} Wh</div>
             <div class="detail">{lowest_energy_row['experiment']}</div>
         </div>""", unsafe_allow_html=True)
 
 st.markdown("<br>", unsafe_allow_html=True)
 
-#Tabs
+# Tabs
 tab1, tab2, tab3, tab4, tab_lstm, tab5, tab6 = st.tabs([
-    "Doğruluk", "Model Boyutu", "Enerji", "Çıkarım Hızı", "LSTM", "Deney Karşılaştırıcı", "Veri Tablosu"
+    "Accuracy", "Model Size", "Energy", "Inference Speed", "LSTM", "Experiment Comparator", "Data Table"
 ])
 
-#TAB 1: Doğruluk 
+# TAB 1: Accuracy
 with tab1:
-    st.markdown('<div class="section-header">Doğruluk Karşılaştırması</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Accuracy Comparison</div>', unsafe_allow_html=True)
     
     col_l, col_r = st.columns(2)
     
@@ -218,7 +218,7 @@ with tab1:
             orientation='h', marker_color=MOB_COLOR,
             text=[f'{v:.4f}' for v in dm_sorted['accuracy']],
             textposition='outside', textfont=dict(size=11, color='#e0e0e0'),
-            hovertemplate='<b>%{y}</b><br>Doğruluk: %{x:.4f}<extra></extra>'
+            hovertemplate='<b>%{y}</b><br>Accuracy: %{x:.4f}<extra></extra>'
         ))
         baseline_acc = dm_sorted[dm_sorted['experiment'].str.contains('Unfreezed')]['accuracy']
         if len(baseline_acc) > 0:
@@ -226,7 +226,7 @@ with tab1:
                           line_color=GRAY, annotation_text="Best Baseline",
                           annotation_font_color=GRAY)
         fig1.update_layout(**DARK_LAYOUT, title=dict(text="MobileNetV2 + CIFAR-10", font_color='#e0e0e0'),
-                          xaxis=dict(range=[0, 1.05], title="Doğruluk", gridcolor='#1e293b'))
+                          xaxis=dict(range=[0, 1.05], title="Accuracy", gridcolor='#1e293b'))
         st.plotly_chart(fig1, use_container_width=True)
     
     with col_r:
@@ -237,27 +237,26 @@ with tab1:
             orientation='h', marker_color=DIS_COLOR,
             text=[f'{v:.4f}' for v in dd_sorted['accuracy']],
             textposition='outside', textfont=dict(size=11, color='#e0e0e0'),
-            hovertemplate='<b>%{y}</b><br>Doğruluk: %{x:.4f}<extra></extra>'
+            hovertemplate='<b>%{y}</b><br>Accuracy: %{x:.4f}<extra></extra>'
         ))
         baseline_acc_d = dd_sorted[dd_sorted['experiment'].str.contains('Baseline')].iloc[0]['accuracy']
         fig2.add_vline(x=baseline_acc_d, line_dash="dash", 
                       line_color=GRAY, annotation_text="Baseline",
                       annotation_font_color=GRAY)
         fig2.update_layout(**DARK_LAYOUT, title=dict(text="DistilBERT + SST-2", font_color='#e0e0e0'),
-                          xaxis=dict(range=[0, 1.05], title="Doğruluk", gridcolor='#1e293b'))
+                          xaxis=dict(range=[0, 1.05], title="Accuracy", gridcolor='#1e293b'))
         st.plotly_chart(fig2, use_container_width=True)
     
     st.markdown("""
     <div class="insight-box">
-        <strong>Bulgu:</strong> Her iki modelde de early stopping ve structured pruning, baseline doğruluğunu 
-        koruyarak veya artırarak optimizasyon sağlamıştır. Quantization her iki modelde de doğruluk kaybına yol açmıştır.
+        <strong>Finding:</strong> In both models, early stopping and structured pruning optimized the model 
+        while preserving or even improving baseline accuracy. Quantization caused an accuracy drop in both models.
     </div>
     """, unsafe_allow_html=True)
 
-# TAB 2: Model Boyutu
-
+# TAB 2: Model Size
 with tab2:
-    st.markdown('<div class="section-header">Model Boyutu Karşılaştırması</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Model Size Comparison</div>', unsafe_allow_html=True)
     
     col_l, col_m, col_r = st.columns(3)
     
@@ -269,10 +268,10 @@ with tab2:
             orientation='h', marker_color=MOB_COLOR,
             text=[f'{v:.2f} MB' for v in dm_s['model_size_mb']],
             textposition='outside', textfont=dict(size=11, color='#e0e0e0'),
-            hovertemplate='<b>%{y}</b><br>Boyut: %{x:.2f} MB<extra></extra>'
+            hovertemplate='<b>%{y}</b><br>Size: %{x:.2f} MB<extra></extra>'
         ))
         fig3.update_layout(**DARK_LAYOUT, title=dict(text="MobileNetV2", font_color='#e0e0e0'),
-                          xaxis=dict(title="Boyut (MB)", gridcolor='#1e293b'))
+                          xaxis=dict(title="Size (MB)", gridcolor='#1e293b'))
         st.plotly_chart(fig3, use_container_width=True)
     
     with col_m:
@@ -283,10 +282,10 @@ with tab2:
             orientation='h', marker_color=DIS_COLOR,
             text=[f'{v:.2f} MB' for v in dd_s['model_size_mb']],
             textposition='outside', textfont=dict(size=11, color='#e0e0e0'),
-            hovertemplate='<b>%{y}</b><br>Boyut: %{x:.2f} MB<extra></extra>'
+            hovertemplate='<b>%{y}</b><br>Size: %{x:.2f} MB<extra></extra>'
         ))
         fig4.update_layout(**DARK_LAYOUT, title=dict(text="DistilBERT", font_color='#e0e0e0'),
-                          xaxis=dict(title="Boyut (MB)", gridcolor='#1e293b'))
+                          xaxis=dict(title="Size (MB)", gridcolor='#1e293b'))
         st.plotly_chart(fig4, use_container_width=True)
     
     with col_r:
@@ -297,24 +296,24 @@ with tab2:
             orientation='h', marker_color=LSTM_COLOR,
             text=[f'{v:.4f} MB' for v in dl_s['model_size_mb']],
             textposition='outside', textfont=dict(size=11, color='#e0e0e0'),
-            hovertemplate='<b>%{y}</b><br>Boyut: %{x:.4f} MB<extra></extra>'
+            hovertemplate='<b>%{y}</b><br>Size: %{x:.4f} MB<extra></extra>'
         ))
         fig4b.update_layout(**DARK_LAYOUT, title=dict(text="LSTM", font_color='#e0e0e0'),
-                           xaxis=dict(title="Boyut (MB)", gridcolor='#1e293b'))
+                           xaxis=dict(title="Size (MB)", gridcolor='#1e293b'))
         st.plotly_chart(fig4b, use_container_width=True)
     
     st.markdown("""
     <div class="insight-box">
-        <strong>Bulgu:</strong> Quantization (INT8) her üç modelde de en büyük boyut azalmasını sağlamıştır — 
-        MobileNetV2'de %72, DistilBERT'te %48, LSTM'de %74. LSTM'de hidden size reduction da 
-        benzer boyut kazancı sağlamıştır (%75) ancak farklı mekanizmayla: parametre sayısını azaltarak.
+        <strong>Finding:</strong> INT8 quantization produced the largest size reduction in all three models — 
+        72% for MobileNetV2, 48% for DistilBERT, 74% for LSTM. On LSTM, hidden-size reduction achieved a 
+        similar gain (75%) but through a different mechanism: by reducing the number of parameters.
     </div>
     """, unsafe_allow_html=True)
     
 
-#TAB 3: Enerji
+# TAB 3: Energy
 with tab3:
-    st.markdown('<div class="section-header">Eğitim Enerji Tüketimi</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Training Energy Consumption</div>', unsafe_allow_html=True)
     
     col_l, col_r = st.columns(2)
     
@@ -327,10 +326,10 @@ with tab3:
             orientation='h', marker_color=MOB_COLOR,
             text=[f'{v*1000:.2f} Wh' for v in dm_e['energy_kwh']],
             textposition='outside', textfont=dict(size=11, color='#e0e0e0'),
-            hovertemplate='<b>%{y}</b><br>Enerji: %{x:.2f} Wh<extra></extra>'
+            hovertemplate='<b>%{y}</b><br>Energy: %{x:.2f} Wh<extra></extra>'
         ))
         fig5.update_layout(**DARK_LAYOUT, title=dict(text="MobileNetV2", font_color='#e0e0e0'),
-                          xaxis=dict(title="Enerji (Wh)", gridcolor='#1e293b'))
+                          xaxis=dict(title="Energy (Wh)", gridcolor='#1e293b'))
         st.plotly_chart(fig5, use_container_width=True)
     
     with col_r:
@@ -341,13 +340,13 @@ with tab3:
             orientation='h', marker_color=DIS_COLOR,
             text=[f'{v*1000:.2f} Wh' for v in dd_e['energy_kwh']],
             textposition='outside', textfont=dict(size=11, color='#e0e0e0'),
-            hovertemplate='<b>%{y}</b><br>Enerji: %{x:.2f} Wh<extra></extra>'
+            hovertemplate='<b>%{y}</b><br>Energy: %{x:.2f} Wh<extra></extra>'
         ))
-        fig6.update_layout(**DARK_LAYOUT, title=dict(text="DistilBERT (yalnızca eğitim içeren deneyler)", font_color='#e0e0e0'),
-                          xaxis=dict(title="Enerji (Wh)", gridcolor='#1e293b'))
+        fig6.update_layout(**DARK_LAYOUT, title=dict(text="DistilBERT (training experiments only)", font_color='#e0e0e0'),
+                          xaxis=dict(title="Energy (Wh)", gridcolor='#1e293b'))
         st.plotly_chart(fig6, use_container_width=True)
     
-    # CO2 somutlaştırma
+    # CO2 contextualization
     total_energy = df_energy_valid['energy_kwh'].sum()
     total_co2 = df['co2_kg'].sum() if 'co2_kg' in df.columns and df['co2_kg'].notna().any() else total_energy * 0.4647
     phone_charges = total_energy * 1000 / 15
@@ -355,26 +354,24 @@ with tab3:
     st.markdown(f"""
     <div class="co2-box">
         <div class="big">{total_energy*1000:.1f} Wh</div>
-        <div class="sub">Tüm deneylerin toplam enerji tüketimi</div>
+        <div class="sub">Total energy across all experiments</div>
         <div class="sub" style="margin-top: 0.8rem;">
-            ≈ {phone_charges:.1f} telefon şarjı | ≈ {total_co2*1000:.1f} g CO₂
+            ≈ {phone_charges:.1f} phone charges | ≈ {total_co2*1000:.1f} g CO₂
         </div>
     </div>
     """, unsafe_allow_html=True)
     
     st.markdown("""
     <div class="insight-box warning">
-        <strong>Not:</strong> Quantization enerji değerleri grafiğe dahil edilmemiştir — bu değerler eğitim değil, 
-        model dönüşüm sürecini yansıtmaktadır. Early stopping enerji tüketimi baseline'dan yüksek görünmektedir 
-        çünkü farklı epoch sayılarıyla çalışmıştır (4 vs 3 epoch).
+        <strong>Note:</strong> Quantization energy values are excluded from the chart — they reflect the 
+        model-conversion step, not training. Early stopping energy appears higher than baseline because it 
+        ran for a different number of epochs (4 vs 3).
     </div>
     """, unsafe_allow_html=True)
 
-#TAB 4: Çıkarım Hızı
-
-
+# TAB 4: Inference Speed
 with tab4:
-    st.markdown('<div class="section-header">Çıkarım Süresi Karşılaştırması</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Inference Time Comparison</div>', unsafe_allow_html=True)
     
     col_l, col_r = st.columns(2)
     
@@ -390,7 +387,7 @@ with tab4:
             orientation='h', marker_color=colors,
             text=[f'{v:.4f}s' for v in dd_inf['inference_time_s']],
             textposition='outside', textfont=dict(size=11, color='#e0e0e0'),
-            hovertemplate='<b>%{y}</b><br>Çıkarım: %{x:.4f}s<extra></extra>'
+            hovertemplate='<b>%{y}</b><br>Inference: %{x:.4f}s<extra></extra>'
         ))
         baseline_inf = dd_inf[dd_inf['experiment'].str.contains('Baseline')]['inference_time_s']
         if len(baseline_inf) > 0:
@@ -398,8 +395,8 @@ with tab4:
                           line_color=GRAY, 
                           annotation_text=f"Baseline ({baseline_inf.values[0]:.4f}s)",
                           annotation_font_color=GRAY)
-        fig7.update_layout(**DARK_LAYOUT, title=dict(text="DistilBERT — Çıkarım Süresi", font_color='#e0e0e0'),
-                          xaxis=dict(title="Süre (s)", gridcolor='#1e293b'))
+        fig7.update_layout(**DARK_LAYOUT, title=dict(text="DistilBERT — Inference Time", font_color='#e0e0e0'),
+                          xaxis=dict(title="Time (s)", gridcolor='#1e293b'))
         st.plotly_chart(fig7, use_container_width=True)
     
     with col_r:
@@ -413,7 +410,7 @@ with tab4:
             orientation='h', marker_color=colors_lstm,
             text=[f'{v*1000:.2f} ms' for v in lstm_inf['inference_time_s']],
             textposition='outside', textfont=dict(size=11, color='#e0e0e0'),
-            hovertemplate='<b>%{y}</b><br>Çıkarım: %{x:.2f} ms<extra></extra>'
+            hovertemplate='<b>%{y}</b><br>Inference: %{x:.2f} ms<extra></extra>'
         ))
         baseline_linf = lstm_inf[lstm_inf['experiment'].str.contains('Baseline')]['inference_time_s']
         if len(baseline_linf) > 0:
@@ -421,12 +418,12 @@ with tab4:
                            line_color=GRAY,
                            annotation_text=f"Baseline ({baseline_linf.values[0]*1000:.2f} ms)",
                            annotation_font_color=GRAY)
-        fig7b.update_layout(**DARK_LAYOUT, title=dict(text="LSTM — Çıkarım Süresi", font_color='#e0e0e0'),
-                           xaxis=dict(title="Süre (ms)", gridcolor='#1e293b'))
+        fig7b.update_layout(**DARK_LAYOUT, title=dict(text="LSTM — Inference Time", font_color='#e0e0e0'),
+                           xaxis=dict(title="Time (ms)", gridcolor='#1e293b'))
         st.plotly_chart(fig7b, use_container_width=True)
     
-    # Early stopping grafiği ayrı satırda
-    st.markdown('<div class="section-header">DistilBERT — Early Stopping Eğitim Seyri</div>', unsafe_allow_html=True)
+    # Early stopping chart on a separate row
+    st.markdown('<div class="section-header">DistilBERT — Early Stopping Training Curve</div>', unsafe_allow_html=True)
     
     epochs = [1, 2, 3, 4]
     train_loss = [0.3865, 0.1932, 0.1072, 0.0513]
@@ -435,43 +432,43 @@ with tab4:
     fig8 = go.Figure()
     fig8.add_trace(go.Scatter(
         x=epochs, y=train_loss, mode='lines+markers',
-        name='Eğitim Kaybı', line=dict(color=MOB_COLOR, width=3),
+        name='Training Loss', line=dict(color=MOB_COLOR, width=3),
         marker=dict(size=10)
     ))
     fig8.add_trace(go.Scatter(
         x=epochs, y=val_loss, mode='lines+markers',
-        name='Doğrulama Kaybı', line=dict(color=DIS_COLOR, width=3),
+        name='Validation Loss', line=dict(color=DIS_COLOR, width=3),
         marker=dict(size=10, symbol='square')
     ))
     fig8.add_vline(x=2, line_dash="dash", line_color=GREEN,
-                  annotation_text="En iyi epoch", annotation_font_color=GREEN)
+                  annotation_text="Best epoch", annotation_font_color=GREEN)
     fig8.add_vline(x=4, line_dash="dash", line_color=RED,
-                  annotation_text="Durdurulma", annotation_font_color=RED)
+                  annotation_text="Stopped", annotation_font_color=RED)
     fig8.add_vrect(x0=2, x1=4, fillcolor="red", opacity=0.08)
-    fig8.update_layout(**DARK_LAYOUT, title=dict(text="Early Stopping — Eğitim Seyri", font_color='#e0e0e0'),
+    fig8.update_layout(**DARK_LAYOUT, title=dict(text="Early Stopping — Training Curve", font_color='#e0e0e0'),
                       xaxis=dict(title="Epoch", dtick=1, gridcolor='#1e293b'),
-                      yaxis=dict(title="Kayıp (Loss)", gridcolor='#1e293b'),
+                      yaxis=dict(title="Loss", gridcolor='#1e293b'),
                       legend=dict(x=0.55, y=0.95, font_color='#e0e0e0'),
                       )
     st.plotly_chart(fig8, use_container_width=True)
     
     st.markdown("""
     <div class="insight-box">
-        <strong>Bulgu:</strong> Dynamic quantization her iki modelde de çıkarım süresini artırmıştır: 
-        DistilBERT'te %40, LSTM'de %160. Buna karşılık yapısal küçültme (structured pruning / hidden size reduction) 
-        her iki modelde de gerçek hızlanma sağlamıştır: DistilBERT'te %10, LSTM'de %61.
+        <strong>Finding:</strong> Dynamic quantization increased inference time in both models: 
+        +40% for DistilBERT, +160% for LSTM. In contrast, structural reduction (structured pruning / 
+        hidden-size reduction) produced real speedups in both: 10% for DistilBERT, 61% for LSTM.
     </div>
     """, unsafe_allow_html=True)
     
     
-#TAB LSTM 
+# TAB LSTM
 with tab_lstm:
-    st.markdown('<div class="section-header">LSTM + Güneş Lekesi Zaman Serisi</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">LSTM + Sunspot Time Series</div>', unsafe_allow_html=True)
     
     col_l, col_r = st.columns(2)
     
     with col_l:
-        # MAE karşılaştırması
+        # MAE comparison
         lstm_sorted = df_lstm.sort_values('mae', ascending=True)
         fig_mae = go.Figure()
         fig_mae.add_trace(go.Bar(
@@ -485,13 +482,13 @@ with tab_lstm:
         fig_mae.add_vline(x=baseline_mae, line_dash="dash", line_color=GRAY,
                          annotation_text=f"Baseline ({baseline_mae:.2f})",
                          annotation_font_color=GRAY)
-        fig_mae.update_layout(**DARK_LAYOUT, title=dict(text="MAE Karşılaştırması", font_color='#e0e0e0'),
-                             xaxis=dict(title="MAE (Güneş Lekesi Sayısı)", gridcolor='#1e293b',
+        fig_mae.update_layout(**DARK_LAYOUT, title=dict(text="MAE Comparison", font_color='#e0e0e0'),
+                             xaxis=dict(title="MAE (Sunspot Count)", gridcolor='#1e293b',
                                        range=[35, 45]))
         st.plotly_chart(fig_mae, use_container_width=True)
     
     with col_r:
-        # RMSE karşılaştırması
+        # RMSE comparison
         lstm_sorted_r = df_lstm.sort_values('rmse', ascending=True)
         fig_rmse = go.Figure()
         fig_rmse.add_trace(go.Bar(
@@ -505,15 +502,15 @@ with tab_lstm:
         fig_rmse.add_vline(x=baseline_rmse, line_dash="dash", line_color=GRAY,
                           annotation_text=f"Baseline ({baseline_rmse:.2f})",
                           annotation_font_color=GRAY)
-        fig_rmse.update_layout(**DARK_LAYOUT, title=dict(text="RMSE Karşılaştırması", font_color='#e0e0e0'),
-                              xaxis=dict(title="RMSE (Güneş Lekesi Sayısı)", gridcolor='#1e293b',
+        fig_rmse.update_layout(**DARK_LAYOUT, title=dict(text="RMSE Comparison", font_color='#e0e0e0'),
+                              xaxis=dict(title="RMSE (Sunspot Count)", gridcolor='#1e293b',
                                         range=[45, 55]))
         st.plotly_chart(fig_rmse, use_container_width=True)
     
     col_l2, col_r2 = st.columns(2)
     
     with col_l2:
-        # Çıkarım süresi
+        # Inference time
         lstm_inf = df_lstm.sort_values('inference_time_s', ascending=True)
         colors_lstm = [GREEN if val == lstm_inf['inference_time_s'].min()
                        else (RED if val == lstm_inf['inference_time_s'].max() else LSTM_COLOR)
@@ -524,14 +521,14 @@ with tab_lstm:
             orientation='h', marker_color=colors_lstm,
             text=[f'{v*1000:.2f} ms' for v in lstm_inf['inference_time_s']],
             textposition='outside', textfont=dict(size=11, color='#e0e0e0'),
-            hovertemplate='<b>%{y}</b><br>Çıkarım: %{x:.2f} ms<extra></extra>'
+            hovertemplate='<b>%{y}</b><br>Inference: %{x:.2f} ms<extra></extra>'
         ))
-        fig_linf.update_layout(**DARK_LAYOUT, title=dict(text="Çıkarım Süresi", font_color='#e0e0e0'),
-                              xaxis=dict(title="Süre (ms)", gridcolor='#1e293b'))
+        fig_linf.update_layout(**DARK_LAYOUT, title=dict(text="Inference Time", font_color='#e0e0e0'),
+                              xaxis=dict(title="Time (ms)", gridcolor='#1e293b'))
         st.plotly_chart(fig_linf, use_container_width=True)
     
     with col_r2:
-        # Model boyutu
+        # Model size
         lstm_size = df_lstm.sort_values('model_size_mb', ascending=True)
         fig_lsize = go.Figure()
         fig_lsize.add_trace(go.Bar(
@@ -539,30 +536,30 @@ with tab_lstm:
             orientation='h', marker_color=LSTM_COLOR,
             text=[f'{v:.4f} MB' for v in lstm_size['model_size_mb']],
             textposition='outside', textfont=dict(size=11, color='#e0e0e0'),
-            hovertemplate='<b>%{y}</b><br>Boyut: %{x:.4f} MB<extra></extra>'
+            hovertemplate='<b>%{y}</b><br>Size: %{x:.4f} MB<extra></extra>'
         ))
-        fig_lsize.update_layout(**DARK_LAYOUT, title=dict(text="Model Boyutu", font_color='#e0e0e0'),
-                               xaxis=dict(title="Boyut (MB)", gridcolor='#1e293b'))
+        fig_lsize.update_layout(**DARK_LAYOUT, title=dict(text="Model Size", font_color='#e0e0e0'),
+                               xaxis=dict(title="Size (MB)", gridcolor='#1e293b'))
         st.plotly_chart(fig_lsize, use_container_width=True)
     
     st.markdown("""
     <div class="insight-box">
-        <strong>Bulgu:</strong> Küçük model (hidden=128) en dengeli ödünleşimi sağlamıştır: %74.8 boyut azalması, 
-        %60.7 çıkarım hızlanması ve yalnızca %6.8 MAE artışı. Dynamic quantization dosya boyutunu benzer oranda 
-        düşürmüş ancak çıkarım süresini %160 artırmıştır — CPU'da tutarlı olarak gözlemlenen cross-model pattern.
+        <strong>Finding:</strong> The small model (hidden=128) offered the most balanced trade-off: 74.8% smaller, 
+        60.7% faster inference, for only a 6.8% MAE increase. Dynamic quantization cut file size by a similar 
+        amount but increased inference time by 160% — the cross-model pattern consistently observed on CPU.
     </div>
     """, unsafe_allow_html=True)
     
     st.markdown("""
     <div class="insight-box warning">
-        <strong>Not:</strong> LSTM enerji tüketimi (0.01–0.04 Wh) CodeCarbon'un ölçüm hassasiyetinin alt sınırındadır. 
-        Bu nedenle LSTM deneyleri model boyutu ve çıkarım hızı odaklı değerlendirilmiştir.
+        <strong>Note:</strong> LSTM energy consumption (0.01–0.04 Wh) sits at the lower limit of CodeCarbon's 
+        measurement precision. LSTM experiments are therefore evaluated on model size and inference speed.
     </div>
     """, unsafe_allow_html=True)
 
-#TAB 5: Deney Karşılaştırıcı
+# TAB 5: Experiment Comparator
 with tab5:
-    st.markdown('<div class="section-header">Deney Karşılaştırıcı</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">Experiment Comparator</div>', unsafe_allow_html=True)
     
     model_choice = st.radio("Model", ["MobileNetV2", "DistilBERT", "LSTM"], horizontal=True)
     df_filtered = df[df['model'] == model_choice]
@@ -570,10 +567,10 @@ with tab5:
     
     col_sel1, col_sel2 = st.columns(2)
     with col_sel1:
-        exp1 = st.selectbox("1. Deney", filtered_experiments, index=0, key="exp1")
+        exp1 = st.selectbox("Experiment 1", filtered_experiments, index=0, key="exp1")
     with col_sel2:
         default_idx = min(1, len(filtered_experiments) - 1)
-        exp2 = st.selectbox("2. Deney", filtered_experiments, index=default_idx, key="exp2")
+        exp2 = st.selectbox("Experiment 2", filtered_experiments, index=default_idx, key="exp2")
     
     row1 = df_filtered[df_filtered['experiment'] == exp1].iloc[0]
     row2 = df_filtered[df_filtered['experiment'] == exp2].iloc[0]
@@ -594,28 +591,28 @@ with tab5:
         metrics = [
             ("MAE", 'mae', False, ""),
             ("RMSE", 'rmse', False, ""),
-            ("Model Boyutu", 'model_size_mb', False, " MB"),
-            ("Enerji", 'energy_kwh', False, " kWh"),
-            ("Çıkarım Süresi", 'inference_time_s', False, " s"),
+            ("Model Size", 'model_size_mb', False, " MB"),
+            ("Energy", 'energy_kwh', False, " kWh"),
+            ("Inference Time", 'inference_time_s', False, " s"),
         ]
     else:
         metrics = [
-            ("Doğruluk", 'accuracy', True, ""),
-            ("F1 Skoru", 'f1_score', True, ""),
-            ("Model Boyutu", 'model_size_mb', False, " MB"),
-            ("Enerji", 'energy_kwh', False, " kWh"),
+            ("Accuracy", 'accuracy', True, ""),
+            ("F1 Score", 'f1_score', True, ""),
+            ("Model Size", 'model_size_mb', False, " MB"),
+            ("Energy", 'energy_kwh', False, " kWh"),
         ]
         if 'inference_time_s' in df.columns:
-            metrics.append(("Çıkarım Süresi", 'inference_time_s', False, " s"))
+            metrics.append(("Inference Time", 'inference_time_s', False, " s"))
     
     comparison_html = f"""
     <div style="display: grid; grid-template-columns: 1fr 2fr 1fr 2fr 1fr; gap: 0; 
                 background: {CARD_BG}; border-radius: 12px; border: 1px solid #475569; overflow: hidden;">
-        <div style="padding: 1rem; text-align: center; font-weight: 600; background: #334155; color: #9ca3af;">Metrik</div>
+        <div style="padding: 1rem; text-align: center; font-weight: 600; background: #334155; color: #9ca3af;">Metric</div>
         <div style="padding: 1rem; text-align: center; font-weight: 600; background: #334155; color: {MOB_COLOR};">{exp1}<br><span style="font-size:0.75rem; color:#9ca3af;">{row1['model']}</span></div>
-        <div style="padding: 1rem; text-align: center; font-weight: 600; background: #334155; color: #9ca3af;">Fark</div>
+        <div style="padding: 1rem; text-align: center; font-weight: 600; background: #334155; color: #9ca3af;">Difference</div>
         <div style="padding: 1rem; text-align: center; font-weight: 600; background: #334155; color: {DIS_COLOR};">{exp2}<br><span style="font-size:0.75rem; color:#9ca3af;">{row2['model']}</span></div>
-        <div style="padding: 1rem; text-align: center; font-weight: 600; background: #334155; color: #9ca3af;">Değişim</div>
+        <div style="padding: 1rem; text-align: center; font-weight: 600; background: #334155; color: #9ca3af;">Change</div>
     """
     
     for label, col, higher_better, unit in metrics:
@@ -661,10 +658,10 @@ with tab5:
         return 1 - norm if invert else norm
     
     if model_choice == "LSTM":
-        categories = ['Tahmin\nDoğruluğu', 'RMSE\nDoğruluğu', 'Model\nKompaktlığı', 'Çıkarım\nHızı']
+        categories = ['Prediction\nAccuracy', 'RMSE\nAccuracy', 'Model\nCompactness', 'Inference\nSpeed']
         radar_cols = [('mae', True), ('rmse', True), ('model_size_mb', True), ('inference_time_s', True)]
     else:
-        categories = ['Doğruluk', 'F1 Skoru', 'Model\nKompaktlığı', 'Enerji\nVerimliliği']
+        categories = ['Accuracy', 'F1 Score', 'Model\nCompactness', 'Energy\nEfficiency']
         radar_cols = [('accuracy', False), ('f1_score', False), ('model_size_mb', True), ('energy_kwh', True)]
     
     vals1, vals2 = [], []
@@ -697,13 +694,13 @@ with tab5:
         plot_bgcolor='rgba(0,0,0,0)',
         legend=dict(font_color='#e0e0e0'),
         height=450,
-        title=dict(text="Çok Boyutlu Karşılaştırma", font=dict(color='#e0e0e0', size=14))
+        title=dict(text="Multi-Dimensional Comparison", font=dict(color='#e0e0e0', size=14))
     )
     st.plotly_chart(fig_radar, use_container_width=True)
 
-#TAB 6: Veri Tablosu
+# TAB 6: Data Table
 with tab6:
-    st.markdown('<div class="section-header">Tüm Deney Sonuçları</div>', unsafe_allow_html=True)
+    st.markdown('<div class="section-header">All Experiment Results</div>', unsafe_allow_html=True)
     
     df_display = df[['model', 'experiment', 'accuracy', 'f1_score', 
                      'model_size_mb', 'energy_kwh', 'mae', 'rmse']].copy()
@@ -711,18 +708,18 @@ with tab6:
         lambda x: f"{x*1000:.2f} Wh" if pd.notna(x) and x > 0.001 else "\u2014"
     )
     df_display = df_display.drop(columns=['energy_kwh'])
-    df_display.columns = ['Model', 'Deney', 'Doğruluk', 'F1 Skoru', 
-                           'Boyut (MB)', 'MAE', 'RMSE', 'Enerji']
+    df_display.columns = ['Model', 'Experiment', 'Accuracy', 'F1 Score', 
+                           'Size (MB)', 'MAE', 'RMSE', 'Energy']
     
     st.dataframe(
         df_display,
         use_container_width=True,
         hide_index=True,
         column_config={
-            "Doğruluk": st.column_config.ProgressColumn(
+            "Accuracy": st.column_config.ProgressColumn(
                 format="%.4f", min_value=0, max_value=1
             ),
-            "F1 Skoru": st.column_config.ProgressColumn(
+            "F1 Score": st.column_config.ProgressColumn(
                 format="%.4f", min_value=0, max_value=1
             ),
         }
@@ -731,7 +728,7 @@ with tab6:
 # Footer
 st.markdown("""
 <div class="footer">
-    TÜBİTAK 2209-A | Green AI — Enerji Verimli Derin Öğrenme Optimizasyonları<br>
-    Ortam: Windows CPU-only | CodeCarbon OfflineEmissionsTracker | PyTorch + TensorFlow | 3 Model, 13 Deney
+    TÜBİTAK 2209-A | Green AI — Energy-Efficient Deep Learning Optimizations<br>
+    Environment: Windows CPU-only | CodeCarbon OfflineEmissionsTracker | PyTorch + TensorFlow | 3 models, 13 experiments
 </div>
 """, unsafe_allow_html=True)
