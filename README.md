@@ -44,6 +44,7 @@ All 13 experiments are explorable in a Streamlit + Plotly dashboard with seven t
 ![Accuracy comparison tab](assets/dashboard-accuracy.png)
 ![Experiment comparator](assets/dashboard-comparator.png)
 
+>  **Explore the full interactive dashboard →** https://green-ai-energy-efficient-deep-learning-k9xeprj3wbgnogxsgtbojc.streamlit.app/
 ---
 
 ## Results at a glance
