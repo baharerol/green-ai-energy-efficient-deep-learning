@@ -4,7 +4,7 @@
 
 Most compression studies look at one technique on one architecture. This project runs all three techniques against an image model (MobileNetV2 + CIFAR-10), a text model (DistilBERT + SST-2), and a time-series model (LSTM + NASA Sunspot), under one shared experimental protocol - **13 experiments, one combined results set, one interactive dashboard** - to answer a single question: *can you cut energy and model size without meaningfully hurting accuracy, and if so, when?*
 
-> **🔗 Live dashboard:** **https://green-ai-energy-efficient-deep-learning-k9xeprj3wbgnogxsgtbojc.streamlit.app/**
+> **Live dashboard:** **https://green-ai-energy-efficient-deep-learning-k9xeprj3wbgnogxsgtbojc.streamlit.app/**
 > _(The load may take ~30s to wake up.)_
 
 ![Dashboard overview](assets/dashboard-overview.png)
